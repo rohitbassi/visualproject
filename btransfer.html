@@ -1,0 +1,320 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        .bar {
+            fill: orange;
+        }
+        
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .dropbtn:hover, .dropbtn:focus {
+      background-color: #3e8e41;
+    }
+    
+    .dropdown {
+      float: right;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      overflow: auto;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      right: 0;
+      z-index: 1;
+    }
+    .toolTip {
+    position: absolute;
+    display: none;
+    min-width: 80px;
+    height: auto;
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #6F257F;
+    padding: 14px;
+    text-align: center;
+  }
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown a:hover {background-color: #ddd;}
+    .show {display: block;}
+    .arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+    </style>
+    </style>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+<body>
+    <button onclick="pie()" >toPie</button>
+<!-- <button onclick="toBar()" >toBar</button> -->
+<svg width="800" height="500"></svg>
+<script>
+var dataset=[];
+var final =[];
+    var svg = d3.select("svg"),
+        margin = 200,
+        width = svg.attr("width") - margin,
+        height = svg.attr("height") - margin
+
+    svg.append("text")
+       .attr("transform", "translate(100,0)")
+       .attr("x", 200)
+       .attr("y", 50)
+       .attr("font-size", "24px")
+       .text("Eye Movement Data")
+
+    var xScale = d3.scaleBand().range([0, width]).padding(0.4);//scaleBand() is used to construct a band scale. This is useful when our data has discrete bands.
+        yScale = d3.scaleLinear().range([height, 0]);//a linear scale for the y-axis since this axis will show our stock prices.
+
+    var g = svg.append("g")
+               .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+    d3.csv("data/datafile.csv", function(error, data) {
+        if (error) {
+          console.log("---")
+            throw error;
+        }
+        //console.log(data[0]["1b_transfers"])
+        //console.log(data[0]["b_transfers"])
+        var max=d3.max(data,function(d){return d.b_transfers})
+        var min=d3.min(data,function(d){return d.b_transfers})
+        var diff=max-min
+        console.log(max)
+        var bin=diff/10;
+        var count1=0;
+        var count2=0;
+        var count3=0;
+        var count4=0;
+        var count5=0;
+        var count6=0;
+        var count7=0;
+        var count8=0;
+        var count9=0;
+        var count10=0;
+        var m=Math.floor(Number(min))
+        var m1=Math.floor(Number(min)+Number(bin))
+        var m2=Math.floor(Number(min)+2*Number(bin))
+        var m3=Math.floor(Number(min)+3*Number(bin))
+        var m4=Math.floor(Number(min)+4*Number(bin))
+        var m5=Math.floor(Number(min)+5*Number(bin))
+        var m6=Math.floor(Number(min)+6*Number(bin))
+        var m7=Math.floor(Number(min)+7*Number(bin))
+        var m8=Math.floor(Number(min)+8*Number(bin))
+        var m9=Math.floor(Number(min)+9*Number(bin))
+        var m10=Math.floor(Number(max))
+        for(var q=0;q<data.length;q++){
+            if(m<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m1){count1++; }
+            else if(m1<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m2){count2++;}
+            else if(m2<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m3){count3++;}
+            else if(m3<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m4){count4++;}
+            else if(m4<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m5){count5++;}
+            else if(m5<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m6){count6++;}
+            else if(m6<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m7){count7++;}
+            else if(m7<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m8){count8++;}
+            else if(m8<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m8){count9++;}
+            else if(m9<=Number(data[q].b_transfers)&& Number(data[q].b_transfers)<m10){count10++;}
+            else {continue;}
+            }
+             dataset=[{"name":0+"-"+m1,"count":count1},{"name":m1+"-"+m2,"count":count2},{"name":m2+"-"+m3 ,"count":count3},{"name":m3+"-"+m4,"count":count4},{"name":m4+"-"+m5,"count":count5},{"name":m5+"-"+m6,"count":count6},{"name":m6+"-"+m7,"count":count7},{"name":m7+"-"+m8,"count":count8},{"name":m8+"-"+m9,"count":count9},{"name":m9+"-"+max,"count":count10}];
+       console.log(dataset)
+
+       for(var t=0;t<dataset.length;t++){
+    final.push(dataset[t].count);
+}
+        xScale.domain(dataset.map(function(d) { return d.name; })); //provide domain values to the x and y scales, here it's X Scale which is Timestamp
+        yScale.domain([0, d3.max(dataset, function(d) { return d.count; })]); // domain value of Fixation Duration to y Scale
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+        var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+        g.append("g") //Another group element to have our x-axis grouped under one group element
+         .attr("transform", "translate(0," + height + ")") // We then use the transform attribute to shift our x-axis towards the bottom of the SVG.
+         .call(d3.axisBottom(xScale)) //We then insert x-axis on this group element using .call(d3.axisBottom(x)).
+         .append("text")
+         .attr("y", height - 250)
+         .attr("x", width - 100)
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+         .text("b_transfers");
+
+        g.append("g") //Another group element to have our y-axis grouped under one group element
+         .call(d3.axisLeft(yScale).tickFormat(function(d){ // Try with X Scaling too.
+             return  d;
+         })
+         .ticks(10)) //We have also specified the number of ticks we would like our y-axis to have using ticks(10).
+         .append("text")
+         .attr("transform", "rotate(-90)")
+         .attr("y", 6)
+         .attr("dy", "-5.1em")
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+         .text("Number of Count");
+
+        g.selectAll(".bar") //created dynamic bars with our data using the SVG rectangle element.
+         .data(dataset)
+         .enter().append("rect")
+         .attr("class", "bar") // try to comment this and see the changes
+                  .attr("fill", function(d, i) {
+            return color(i);
+        })
+        .attr("id", function(d, i) {
+            return i;
+        })
+         .on("mouseover", function() {
+            d3.select(this)
+                .attr("fill", "black")
+                .attr("text",function(d) { return yScale(d.count); });
+        })
+        .on("mouseout", function(d, i) {
+            d3.select(this).attr("fill", function() {
+                tooltip.style("display", "none");
+                return "" + color(this.id) + "";
+            })})
+        .on("mousemove", function(d){
+            tooltip
+              .style("left", d3.event.pageX - 50 + "px")
+              .style("top", d3.event.pageY - 70 + "px")
+              .style("display", "inline-block")
+              .html((d.name) + "<br>" + "count:"+ (d.count));
+        })
+         .attr("x", function(d) { return xScale(d.name); })  //x scale created earlier and pass the b_transfers value from our data.
+         .attr("y", function(d) { return yScale(d.count); }) // pass the data value to our y scale and receive the corresponding y value from the y range.
+         .attr("width", xScale.bandwidth()) //width of our bars would be determined by the scaleBand() function.
+         .attr("height", function(d) { return height - yScale(d.count); }); //height of the bar would be calculated as height - yScale(d.value)
+         //the height of the SVG minus the corresponding y-value of the bar from the y-scale
+    });
+
+
+//var data = [10, 20, 100];
+function pie(){
+    var width = 960,
+    height = 500,
+    radius = Math.min(width, height) / 2;
+//var color = d3.scaleOrdinal(d3.schemeCategory10);
+        var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+ 
+var color = d3.scaleOrdinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888"]);
+
+var arc = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0);
+
+var labelArc = d3.arc()
+    .outerRadius(radius - 40)
+    .innerRadius(radius - 40);
+
+var pie = d3.pie()
+    .sort(null)
+    .value(function(d) { return d; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  var g = svg.selectAll(".arc")
+      .data(pie(final))
+    .enter().append("g")
+      .attr("class", "arc")
+                .attr("fill", function(d, i) {
+            return color(i);
+        })
+        .attr("id", function(d, i) {
+            return i;
+        })
+         .on("mouseover", function() {
+            d3.select(this)
+                .attr("fill", "black")
+                .attr("text",function(d) { return yScale(d.data); });
+        })
+        .on("mouseout", function(d, i) {
+            d3.select(this).attr("fill", function() {
+                tooltip.style("display", "none");
+                return "" + color(this.id) + "";
+            })})
+        .on("mousemove", function(d){
+            tooltip
+              .style("left", d3.event.pageX - 50 + "px")
+              .style("top", d3.event.pageY - 70 + "px")
+              .style("display", "inline-block")
+              .html(  "count:"+ (d.data));
+        });
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d.data; });
+
+
+}
+
+
+
+</script>
+
+<script>
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}    
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}            
+</script>
+<div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a href="/">rank</a>
+            <a href="/btransfer">btransfer</a>
+            <a href="/govcon">govcon</a>
+            <a href="/goven">goven</a>
+            <a href="/topmar">topmar</a>
+            <a href="/trade">trade</a>
+            <a href="/govsize">govsize</a>
+            <a href="/quartile">quartile</a>
+            <a href="/milin">milin</a>
+            <a href="/intleg">intleg</a>
+            <a href="/soundmoney">soundmoney</a>
+        </div>
+      </div>
+</body>
+</html>
