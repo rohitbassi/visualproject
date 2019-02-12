@@ -185,37 +185,59 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
         .attr("id", function(d, i) {
             return i;
         })
-        .on("mouseover", function() {
-            var xPos = +d3.select(this).attr("x")
-        var wid = +d3.select(this).attr("width");
-            d3.select(this)
-            .attr("x", xPos - 10)
-            .attr("width", wid + 20)
-                .attr("fill", "black")
-                .attr("text",function(d) { return yScale(d.count); });
-        })
-        .on("mouseout", function(d, i) {
-            d3.select(this).attr("fill", function() {
-                tooltip.style("display", "none");
-                return "" + color(this.id) + "";
-            }).attr("x", function(d) {
-                return xScale(d.name)
-            })
-            .attr("width", xScale.bandwidth())})
-        .on("mousemove", function(d){
-            tooltip
-              .style("left", d3.event.pageX - 50 + "px")
-              .style("top", d3.event.pageY - 70 + "px")
-              .style("display", "inline-block")
-              .html((d.name) + "<br>" + "count:"+ (d.count));
-        })
-         .attr("x", function(d) { return xScale(d.name); })  //x scale created earlier and pass the _sound_money value from our data.
+        .on("mouseover", onMouseOver) //On selection of bar elements, two new event handlers added, viz. mouseover and mouseout and we are calling the respective functions to handle mouse events
+         .on("mouseout", onMouseOut)
+
+         .attr("x", function(d) { return xScale(d.name); })  //x scale created earlier and pass the rank value from our data.
          .attr("y", function(d) { return yScale(d.count); }) // pass the data value to our y scale and receive the corresponding y value from the y range.
-         .attr("width", xScale.bandwidth()) //width of our bars would be determined by the scaleBand() function.
-         .attr("height", function(d) { return height - yScale(d.count); }); //height of the bar would be calculated as height - yScale(d.value)
-         //the height of the SVG minus the corresponding y-value of the bar from the y-scale
+         .attr("width", xScale.bandwidth()) 
+         //width of our bars would be determined by the scaleBand() function.
+           .transition()
+         .ease(d3.easeLinear)
+         .duration(400)
+         .delay(function (d, i) {
+             return i * 50;
+         })
+         .attr("height", function(d) { return height - yScale(d.count); });
     });
 
+    function onMouseOver(d, i) {
+        d3.select(this).attr('class', 'highlight'); // this, is the object that "owns" the JavaScript code
+         //selected bar (given by the 'this' object) d3.select(this) creates a 1-element selection containing the current node
+        d3.select(this)
+          .transition()     // adds animation
+          .duration(400)
+          .attr('width', xScale.bandwidth() + 5)
+          .attr("y", function(d) { return yScale(d.count) - 10; })
+          .attr("height", function(d) { return height - yScale(d.count) + 10; });
+
+        g.append("text")
+         .attr('class', 'val')
+         .attr('x', function() {
+             return xScale(d.name);
+         })
+         .attr('y', function() { 
+             return yScale(d.count) - 15;
+         })
+         .text(function() {
+             return "count"+":"+[d.count];  // Value of the text
+         });
+    }
+
+    //mouseout event handler function
+    function onMouseOut(d, i) {
+        // use the text label class to remove label on mouseout
+        d3.select(this).attr('class', 'bar');
+        d3.select(this)
+          .transition()     // adds animation
+          .duration(400)
+          .attr('width', xScale.bandwidth())
+          .attr("y", function(d) { return yScale(d.count); }) // What if we don't again fix this Value ?
+          .attr("height", function(d) { return height - yScale(d.count); }); // Play with changing the Value
+
+        d3.selectAll('.val')
+          .remove()
+    }
 
 //var data = [10, 20, 100];
 function pie(){
@@ -229,7 +251,7 @@ function pie(){
         var tooltip = d3.select("body").append("div").attr("class", "toolTip");
  
 var color = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888"]);
+.range(["#e28b51", "#51db86", "#894fd6","#c15549","#46c4b5","#2C93E8","#838690","#F56C4E"]);
 
 var arc = d3.arc()
     .outerRadius(radius - 10)
