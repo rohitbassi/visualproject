@@ -71,10 +71,13 @@
     </style>
     <script src="https://d3js.org/d3.v4.min.js"></script>
 <body>
-    <button onclick="pie()" >toPie</button>
-<!-- <button onclick="toBar()" >toBar</button> -->
+<!-- <button onclick="pie()" >toPie</button> -->
+<!-- <button onclick="bar()" >toBar</button> -->
+<input onclick="pie()" type="button" value="TO PIE CHART" id="myButton1" />
+<input onclick="window.location.href=window.location.href" type="button" value="TO BAR CHART" id="myButton2"  disabled />
 <svg width="800" height="500"></svg>
 <script>
+
 var dataset=[];
 var final =[];
     var svg = d3.select("svg"),
@@ -94,6 +97,7 @@ var final =[];
 
     var g = svg.append("g")
                .attr("transform", "translate(" + 100 + "," + 100 + ")");
+ 
 
     d3.csv("data/datafile.csv", function(error, data) {
         if (error) {
@@ -101,8 +105,7 @@ var final =[];
             throw error;
         }
         //console.log(data[0]["1rank"])
-       // console.log(data[0])
-        //console.log(data[0].ECONOMIC_FREEDOM)
+        //console.log(data[0]["rank"])
         var max=d3.max(data,function(d){return d.rank})
         var min=d3.min(data,function(d){return d.rank})
         var diff=max-min
@@ -148,6 +151,7 @@ var final =[];
        for(var t=0;t<dataset.length;t++){
     final.push(dataset[t].count);
 }
+
         xScale.domain(dataset.map(function(d) { return d.name; })); //provide domain values to the x and y scales, here it's X Scale which is Timestamp
         yScale.domain([0, d3.max(dataset, function(d) { return d.count; })]); // domain value of Fixation Duration to y Scale
 var color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -186,7 +190,11 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
             return i;
         })
          .on("mouseover", function() {
+            var xPos = +d3.select(this).attr("x")
+        var wid = +d3.select(this).attr("width");
             d3.select(this)
+            .attr("x", xPos - 10)
+            .attr("width", wid + 20)
                 .attr("fill", "black")
                 .attr("text",function(d) { return yScale(d.count); });
         })
@@ -194,7 +202,10 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
             d3.select(this).attr("fill", function() {
                 tooltip.style("display", "none");
                 return "" + color(this.id) + "";
-            })})
+            }).attr("x", function(d) {
+                return xScale(d.name)
+            })
+            .attr("width", xScale.bandwidth())})
         .on("mousemove", function(d){
             tooltip
               .style("left", d3.event.pageX - 50 + "px")
@@ -207,11 +218,15 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
          .attr("width", xScale.bandwidth()) //width of our bars would be determined by the scaleBand() function.
          .attr("height", function(d) { return height - yScale(d.count); }); //height of the bar would be calculated as height - yScale(d.value)
          //the height of the SVG minus the corresponding y-value of the bar from the y-scale
-    });
+     });
 
 
 //var data = [10, 20, 100];
 function pie(){
+    
+  d3.select("svg").remove();
+  document.getElementById("myButton2").disabled = false;
+  document.getElementById("myButton1").disabled = true;
     var width = 960,
     height = 500,
     radius = Math.min(width, height) / 2;

@@ -71,7 +71,8 @@
     </style>
     <script src="https://d3js.org/d3.v4.min.js"></script>
 <body>
-    <button onclick="pie()" >toPie</button>
+    <input onclick="pie()" type="button" value="TO PIE CHART" id="myButton1" />
+    <input onclick="window.location.href=window.location.href" type="button" value="TO BAR CHART" id="myButton2"  disabled />
 <!-- <button onclick="toBar()" >toBar</button> -->
 <svg width="800" height="500"></svg>
 <script>
@@ -184,8 +185,12 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
         .attr("id", function(d, i) {
             return i;
         })
-         .on("mouseover", function() {
+        .on("mouseover", function() {
+            var xPos = +d3.select(this).attr("x")
+        var wid = +d3.select(this).attr("width");
             d3.select(this)
+            .attr("x", xPos - 10)
+            .attr("width", wid + 20)
                 .attr("fill", "black")
                 .attr("text",function(d) { return yScale(d.count); });
         })
@@ -193,7 +198,10 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
             d3.select(this).attr("fill", function() {
                 tooltip.style("display", "none");
                 return "" + color(this.id) + "";
-            })})
+            }).attr("x", function(d) {
+                return xScale(d.name)
+            })
+            .attr("width", xScale.bandwidth())})
         .on("mousemove", function(d){
             tooltip
               .style("left", d3.event.pageX - 50 + "px")
@@ -211,6 +219,9 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 //var data = [10, 20, 100];
 function pie(){
+    d3.select("svg").remove();
+  document.getElementById("myButton2").disabled = false;
+  document.getElementById("myButton1").disabled = true;
     var width = 960,
     height = 500,
     radius = Math.min(width, height) / 2;
