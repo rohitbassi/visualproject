@@ -3,11 +3,11 @@
 <head>
     <style>
         .bar {
-            fill: orange;
+            fill: rgb(95, 33, 5);
         }
         
     .dropbtn {
-      background-color: #4CAF50;
+      background-color:grey;
       color: white;
       padding: 16px;
       font-size: 16px;
@@ -70,9 +70,9 @@
     </style>
     </style>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-<body>
+    <body style="background-image:url(https://www.sas.com/en_us/insights/big-data/data-visualization/_jcr_content/par/styledcontainer_afc8/image.img.jpg/1534433496976.jpg)">
 <!-- <button onclick="toBar()" >toBar</button> -->
-<input onclick="pie()" type="button" value="TO PIE CHART" id="myButton1" />
+<input onclick="pie()" autofocus type="button" value="TO PIE CHART" id="myButton1" />
 <input onclick="window.location.href=window.location.href" type="button" value="TO BAR CHART" id="myButton2"  disabled />
 <svg width="800" height="500"></svg>
 <script>
@@ -88,7 +88,7 @@ var final =[];
        .attr("x", 200)
        .attr("y", 50)
        .attr("font-size", "24px")
-       .text("Eye Movement Data")
+       .text("ECONOMIC FREEDOM DATA")
 
     var xScale = d3.scaleBand().range([0, width]).padding(0.4);//scaleBand() is used to construct a band scale. This is useful when our data has discrete bands.
         yScale = d3.scaleLinear().range([height, 0]);//a linear scale for the y-axis since this axis will show our stock prices.
@@ -160,7 +160,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
          .attr("x", width - 100)
          .attr("text-anchor", "end")
          .attr("stroke", "black")
-         .text("quartile");
+         .text("Quartile");
 
         g.append("g") //Another group element to have our y-axis grouped under one group element
          .call(d3.axisLeft(yScale).tickFormat(function(d){ // Try with X Scaling too.
@@ -336,17 +336,17 @@ window.onclick = function(event) {
 <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn">Dropdown</button>
         <div id="myDropdown" class="dropdown-content">
-            <a href="/">rank</a>
-            <a href="/btransfer">btransfer</a>
-            <a href="/govcon">govcon</a>
-            <a href="/goven">goven</a>
-            <a href="/topmar">topmar</a>
-            <a href="/trade">trade</a>
-            <a href="/govsize">govsize</a>
-            <a href="/quartile">quartile</a>
-            <a href="/milin">milin</a>
-            <a href="/intleg">intleg</a>
-            <a href="/soundmoney">soundmoney</a>
+                <a href="/">Rank</a>
+                <a href="/btransfer">Btransfer</a>
+                <a href="/govcon">Govt consumption</a>
+                <a href="/goven">Govt enterprises</a>
+                <a href="/topmar">Top margin</a>
+                <a href="/trade">Trade</a>
+                <a href="/govsize">Govt Size</a>
+                <a href="/quartile">Quartile</a>
+                <a href="/milin">Military Integrity</a>
+                <a href="/intleg">Integrity Legal System</a>
+                <a href="/soundmoney">Sound Money</a>
         </div>
       </div>
 </body>

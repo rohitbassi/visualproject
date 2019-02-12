@@ -44,6 +44,8 @@ app.get('/intleg', function(req, res) {
 app.get('/soundmoney', function(req, res) {
     res.sendFile(path.join(__dirname + '/soundmoney.html'));
 });
-
+app.get('/front', function(req, res) {
+    res.sendFile(path.join(__dirname + '/front.html'));
+});
 app.listen(8080);
 
