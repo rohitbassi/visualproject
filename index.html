@@ -72,8 +72,7 @@
     </style>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <body style="background-image:url(https://www.sas.com/en_us/insights/big-data/data-visualization/_jcr_content/par/styledcontainer_afc8/image.img.jpg/1534433496976.jpg)">
-<!-- <button onclick="pie()" >toPie</button> -->
-<!-- <button onclick="bar()" >toBar</button> -->
+
 <input onclick="pie()" autofocus type="button" value="TO PIE CHART" id="myButton1" />
 <input onclick="window.location.href=window.location.href"  type="button" value="TO BAR CHART" id="myButton2"  disabled />
 <svg width="800" height="500"></svg>
@@ -105,34 +104,16 @@ var final =[];
           console.log("---")
             throw error;
         }
-        //console.log(data[0]["1rank"])
-        //console.log(data[0]["rank"])
         var max=d3.max(data,function(d){return d.rank})
         var min=d3.min(data,function(d){return d.rank})
         var diff=max-min
         console.log(max)
         var bin=diff/10;
-        var count1=0;
-        var count2=0;
-        var count3=0;
-        var count4=0;
-        var count5=0;
-        var count6=0;
-        var count7=0;
-        var count8=0;
-        var count9=0;
-        var count10=0;
-        var m=Math.floor(Number(min))
-        var m1=Math.floor(Number(min)+Number(bin))
-        var m2=Math.floor(Number(min)+2*Number(bin))
-        var m3=Math.floor(Number(min)+3*Number(bin))
-        var m4=Math.floor(Number(min)+4*Number(bin))
-        var m5=Math.floor(Number(min)+5*Number(bin))
-        var m6=Math.floor(Number(min)+6*Number(bin))
-        var m7=Math.floor(Number(min)+7*Number(bin))
-        var m8=Math.floor(Number(min)+8*Number(bin))
-        var m9=Math.floor(Number(min)+9*Number(bin))
-        var m10=Math.floor(Number(max))
+        var count1=0,count2=0, count3=0, count4=0, count5=0, count6=0, count7=0, count8=0, count9=0,count10=0;
+        var m=Math.floor(Number(min)), m1=Math.floor(Number(min)+Number(bin)), m2=Math.floor(Number(min)+2*Number(bin)),
+         m3=Math.floor(Number(min)+3*Number(bin)), m4=Math.floor(Number(min)+4*Number(bin)), m5=Math.floor(Number(min)+5*Number(bin))
+        , m6=Math.floor(Number(min)+6*Number(bin)), m7=Math.floor(Number(min)+7*Number(bin)), m8=Math.floor(Number(min)+8*Number(bin))
+        , m9=Math.floor(Number(min)+9*Number(bin)), m10=Math.floor(Number(max))
         for(var q=0;q<data.length;q++){
             if(m<=Number(data[q].rank)&& Number(data[q].rank)<m1){count1++; }
             else if(m1<=Number(data[q].rank)&& Number(data[q].rank)<m2){count2++;}
@@ -146,7 +127,11 @@ var final =[];
             else if(m9<=Number(data[q].rank)&& Number(data[q].rank)<m10){count10++;}
             else {continue;}
             }
-             dataset=[{"name":0+"-"+m1,"count":count1},{"name":m1+"-"+m2,"count":count2},{"name":m2+"-"+m3 ,"count":count3},{"name":m3+"-"+m4,"count":count4},{"name":m4+"-"+m5,"count":count5},{"name":m5+"-"+m6,"count":count6},{"name":m6+"-"+m7,"count":count7},{"name":m7+"-"+m8,"count":count8},{"name":m8+"-"+m9,"count":count9},{"name":m9+"-"+max,"count":count10}];
+             dataset=[{"name":0+"-"+m1,"count":count1},{"name":m1+"-"+m2,"count":count2},
+             {"name":m2+"-"+m3 ,"count":count3},{"name":m3+"-"+m4,"count":count4},
+             {"name":m4+"-"+m5,"count":count5},{"name":m5+"-"+m6,"count":count6},
+             {"name":m6+"-"+m7,"count":count7},{"name":m7+"-"+m8,"count":count8},
+             {"name":m8+"-"+m9,"count":count9},{"name":m9+"-"+max,"count":count10}];
        console.log(dataset)
 
        for(var t=0;t<dataset.length;t++){
@@ -171,7 +156,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
          .call(d3.axisLeft(yScale).tickFormat(function(d){ // Try with X Scaling too.
              return  d;
          })
-         .ticks(10)) //We have also specified the number of ticks we would like our y-axis to have using ticks(10).
+         .ticks(15)) //We have also specified the number of ticks we would like our y-axis to have using ticks(10).
          .append("text")
          .attr("transform", "rotate(-90)")
          .attr("y", 6)
