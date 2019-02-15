@@ -73,11 +73,54 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <body style="background-image:url(https://www.sas.com/en_us/insights/big-data/data-visualization/_jcr_content/par/styledcontainer_afc8/image.img.jpg/1534433496976.jpg)">
 
-<input onclick="pie()" autofocus type="button" value="TO PIE CHART" id="myButton1" />
-<input onclick="window.location.href=window.location.href"  type="button" value="TO BAR CHART" id="myButton2"  disabled />
-<svg width="800" height="500"></svg>
+<input onclick="mystatus()" autofocus type="button" value="TO PIE CHART" id="myButton1" />
+<input onclick="mystatus1()"  type="button" value="TO BAR CHART" id="myButton2"  disabled />
+<input type="range" min=1 max=15 step=1 id="year" value=10 oninput="selected_year.value = year.value" >
+<output name="selected_year" id="selected_year">10 </output>
+<svg width="850" height="600"></svg>
+<div class="dropdown">
+        <button onclick="myFunction()" style="background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqBcqdwQwUdP1kvhxOq4FyQlyEGRyavPquzheUdhlONACkcaS1)" class="dropbtn" >Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a onclick="callme(id)" id="rank">Rank</a>
+            <a onclick="callme(id)" id="a_credit_market_reg">Credit market reg</a>
+            <a onclick="callme(id)" id="a_government_consumption">Govt consumption</a>
+            <a onclick="callme(id)" id="h_reliability_police">Reliability police</a>
+            <a onclick="callme(id)" id="d_top_marg_tax_rate">Top margin</a>
+            <a onclick="callme(id)" id="_property_rights">Property Rights</a>
+            <a onclick="callme(id)" id="_size_government">Govt Size</a>
+            <a onclick="callme(id)" id="I_business_costs_crime">Business costs crime</a>
+            <a onclick="callme(id)" id="d_military_interference">Military Integrity</a>
+            <a onclick="callme(id)" id="c_inflation">Inflation</a>
+            <a onclick="callme(id)" id="_regulation">Regulation</a>
+        </div>
+      </div>
 <script>
+    start(10,"bar","rank");
+    var t="rank";
+    function callme(id){
+        t=id;
+        start(10,"bar",t)
+    }
+  var slider = d3.select('#year');
+slider.on('change', function() {
+ start(this.value,"bar",t);
+});
+function mystatus(){
+var x=document.getElementById('year').value,
+graph="pie",
+status=t;
+start(x,graph,status)
+}
 
+function mystatus1(){
+var x=document.getElementById('year').value,
+graph="bar";
+status=t;
+start(x,graph,status)
+}
+function start(a,graph,attribute){
+    var svg = d3.select("svg");
+svg.selectAll("*").remove();
 var dataset=[];
 var final =[];
     var svg = d3.select("svg"),
@@ -104,42 +147,60 @@ var final =[];
           console.log("---")
             throw error;
         }
-        var max=d3.max(data,function(d){return d.rank})
-        var min=d3.min(data,function(d){return d.rank})
+        var max=d3.max(data,function(d){  return Number(d[attribute]);})
+        var min=d3.min(data,function(d){return Number(d[attribute]);})
+        console.log(max);
+
         var diff=max-min
-        console.log(max)
-        var bin=diff/10;
-        var count1=0,count2=0, count3=0, count4=0, count5=0, count6=0, count7=0, count8=0, count9=0,count10=0;
-        var m=Math.floor(Number(min)), m1=Math.floor(Number(min)+Number(bin)), m2=Math.floor(Number(min)+2*Number(bin)),
-         m3=Math.floor(Number(min)+3*Number(bin)), m4=Math.floor(Number(min)+4*Number(bin)), m5=Math.floor(Number(min)+5*Number(bin))
-        , m6=Math.floor(Number(min)+6*Number(bin)), m7=Math.floor(Number(min)+7*Number(bin)), m8=Math.floor(Number(min)+8*Number(bin))
-        , m9=Math.floor(Number(min)+9*Number(bin)), m10=Math.floor(Number(max))
-        for(var q=0;q<data.length;q++){
-            if(m<=Number(data[q].rank)&& Number(data[q].rank)<m1){count1++; }
-            else if(m1<=Number(data[q].rank)&& Number(data[q].rank)<m2){count2++;}
-            else if(m2<=Number(data[q].rank)&& Number(data[q].rank)<m3){count3++;}
-            else if(m3<=Number(data[q].rank)&& Number(data[q].rank)<m4){count4++;}
-            else if(m4<=Number(data[q].rank)&& Number(data[q].rank)<m5){count5++;}
-            else if(m5<=Number(data[q].rank)&& Number(data[q].rank)<m6){count6++;}
-            else if(m6<=Number(data[q].rank)&& Number(data[q].rank)<m7){count7++;}
-            else if(m7<=Number(data[q].rank)&& Number(data[q].rank)<m8){count8++;}
-            else if(m8<=Number(data[q].rank)&& Number(data[q].rank)<m8){count9++;}
-            else if(m9<=Number(data[q].rank)&& Number(data[q].rank)<m10){count10++;}
-            else {continue;}
-            }
-             dataset=[{"name":0+"-"+m1,"count":count1},{"name":m1+"-"+m2,"count":count2},
-             {"name":m2+"-"+m3 ,"count":count3},{"name":m3+"-"+m4,"count":count4},
-             {"name":m4+"-"+m5,"count":count5},{"name":m5+"-"+m6,"count":count6},
-             {"name":m6+"-"+m7,"count":count7},{"name":m7+"-"+m8,"count":count8},
-             {"name":m8+"-"+m9,"count":count9},{"name":m9+"-"+max,"count":count10}];
-       console.log(dataset)
+        var bin=diff/a;
+        var bined;
+        var size=a;
+        var test = new Array();
+        for(var i=0; i<a; i++)
+        {
+            test[i] = {count : 0, 
+                value: []};
+        }
+        data.forEach(function(d){
+            
+             bined= Math.floor((Number(d[attribute])-min)/ bin);
+             if(bined < test.length) {
+                test[bined].count += 1;
+                test[bined].value.push(d[attribute]);
+             }
+            console.log(bined)
+        });
+        var m,mi;
+var test1 = new Array();
+for(var i=0; i<a; i++)
+        {
+             test1[i] = {dataset1 : "" ,
+                da:0 };
+        }
+       var dataset1=[];
+       var da=[];
+        for(var j=0;j<test.length;j++){
+            m=d3.max(test[j].value,function(d){ return Number(d);})
+            mi=d3.min(test[j].value,function(d){return Number(d);})
+            var v= m.toFixed(1)
+            var vv=mi.toFixed(1)
+    test1[j].dataset1=v+"-"+vv;
+ test1[j].da=test[j].count;
+        }
+        console.log(test1)
 
-       for(var t=0;t<dataset.length;t++){
-    final.push(dataset[t].count);
+       for(var t=0;t<test1.length;t++){
+    final.push(test1[t].da);
+   
 }
+if(graph=="bar"){bargraph();}
+else{pie();}
+function bargraph(){
 
-        xScale.domain(dataset.map(function(d) { return d.name; })); //provide domain values to the x and y scales, here it's X Scale which is Timestamp
-        yScale.domain([0, d3.max(dataset, function(d) { return d.count; })]); // domain value of Fixation Duration to y Scale
+    document.getElementById("myButton2").disabled = true;
+  document.getElementById("myButton1").disabled = false;
+        xScale.domain(test1.map(function(d) { return d.dataset1; })); //provide domain values to the x and y scales, here it's X Scale which is Timestamp
+        yScale.domain([0, d3.max(test1, function(d) { return d.da; })]); // domain value of Fixation Duration to y Scale
 var color = d3.scaleOrdinal(d3.schemeCategory10);
         var tooltip = d3.select("body").append("div").attr("class", "toolTip");
         g.append("g") //Another group element to have our x-axis grouped under one group element
@@ -150,7 +211,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
          .attr("x", width - 100)
          .attr("text-anchor", "end")
          .attr("stroke", "black")
-         .text("RANK");
+         .text(attribute);
 
         g.append("g") //Another group element to have our y-axis grouped under one group element
          .call(d3.axisLeft(yScale).tickFormat(function(d){ // Try with X Scaling too.
@@ -166,7 +227,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
          .text("Number of Count");
 
         g.selectAll(".bar") //created dynamic bars with our data using the SVG rectangle element.
-         .data(dataset)
+         .data(test1)
          .enter().append("rect")
          .attr("class", "bar") // try to comment this and see the changes
                   .attr("fill", function(d, i) {
@@ -178,8 +239,8 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
         .on("mouseover", onMouseOver) //On selection of bar elements, two new event handlers added, viz. mouseover and mouseout and we are calling the respective functions to handle mouse events
          .on("mouseout", onMouseOut)
 
-         .attr("x", function(d) { return xScale(d.name); })  //x scale created earlier and pass the rank value from our data.
-         .attr("y", function(d) { return yScale(d.count); }) // pass the data value to our y scale and receive the corresponding y value from the y range.
+         .attr("x", function(d) { return xScale(d.dataset1); })  //x scale created earlier and pass the rank value from our data.
+         .attr("y", function(d) { return yScale(d.da); }) // pass the data value to our y scale and receive the corresponding y value from the y range.
          .attr("width", xScale.bandwidth()) 
          //width of our bars would be determined by the scaleBand() function.
            .transition()
@@ -188,8 +249,9 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
          .delay(function (d, i) {
              return i * 50;
          })
-         .attr("height", function(d) { return height - yScale(d.count); });     });
-
+         .attr("height", function(d) { return height - yScale(d.da); });  }   });
+        
+        
      function onMouseOver(d, i) {
         d3.select(this).attr('class', 'highlight'); // this, is the object that "owns" the JavaScript code
          //selected bar (given by the 'this' object) d3.select(this) creates a 1-element selection containing the current node
@@ -197,19 +259,19 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
           .transition()     // adds animation
           .duration(400)
           .attr('width', xScale.bandwidth() + 5)
-          .attr("y", function(d) { return yScale(d.count) - 10; })
-          .attr("height", function(d) { return height - yScale(d.count) + 10; });
+          .attr("y", function(d) { return yScale(d.da) - 10; })
+          .attr("height", function(d) { return height - yScale(d.da) + 10; });
 
         g.append("text")
          .attr('class', 'val')
          .attr('x', function() {
-             return xScale(d.name);
+             return xScale(d.dataset1);
          })
          .attr('y', function() { 
-             return yScale(d.count) - 15;
+             return yScale(d.da) - 15;
          })
          .text(function() {
-             return "count"+":"+[d.count];  // Value of the text
+             return "count"+":"+[d.da];  // Value of the text
          });
     }
 
@@ -221,23 +283,21 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
           .transition()     // adds animation
           .duration(400)
           .attr('width', xScale.bandwidth())
-          .attr("y", function(d) { return yScale(d.count); }) // What if we don't again fix this Value ?
-          .attr("height", function(d) { return height - yScale(d.count); }); // Play with changing the Value
+          .attr("y", function(d) { return yScale(d.da); }) // What if we don't again fix this Value ?
+          .attr("height", function(d) { return height - yScale(d.da); }); // Play with changing the Value
 
         d3.selectAll('.val')
           .remove()
     }
 
-//var data = [10, 20, 100];
 function pie(){
-    
+    console.log(final)
   d3.select("svg").remove();
   document.getElementById("myButton2").disabled = false;
   document.getElementById("myButton1").disabled = true;
     var width = 960,
     height = 500,
     radius = Math.min(width, height) / 2;
-//var color = d3.scaleOrdinal(d3.schemeCategory10);
         var tooltip = d3.select("body").append("div").attr("class", "toolTip");
  
 var color = d3.scaleOrdinal()
@@ -301,7 +361,7 @@ var svg = d3.select("body").append("svg")
 
 }
 
-
+}
 
 </script>
 
@@ -323,21 +383,6 @@ window.onclick = function(event) {
   }
 }            
 </script>
-<div class="dropdown">
-    <button onclick="myFunction()" style="background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqBcqdwQwUdP1kvhxOq4FyQlyEGRyavPquzheUdhlONACkcaS1)" class="dropbtn" >Dropdown</button>
-    <div id="myDropdown" class="dropdown-content">
-        <a href="/">Rank</a>
-        <a href="/btransfer">Btransfer</a>
-        <a href="/govcon">Govt consumption</a>
-        <a href="/goven">Govt enterprises</a>
-        <a href="/topmar">Top margin</a>
-        <a href="/trade">Trade</a>
-        <a href="/govsize">Govt Size</a>
-        <a href="/quartile">Quartile</a>
-        <a href="/milin">Military Integrity</a>
-        <a href="/intleg">Integrity Legal System</a>
-        <a href="/soundmoney">Sound Money</a>
-    </div>
-  </div>
+
 </body>
 </html>

@@ -14,38 +14,5 @@ var path = require('path');
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
-app.get('/btransfer', function(req, res) {
-    res.sendFile(path.join(__dirname + '/btransfer.html'));
-});
-app.get('/quartile', function(req, res) {
-    res.sendFile(path.join(__dirname + '/quartile.html'));
-});
-app.get('/govcon', function(req, res) {
-    res.sendFile(path.join(__dirname + '/govcon.html'));
-});
-app.get('/goven', function(req, res) {
-    res.sendFile(path.join(__dirname + '/goven.html'));
-});
-app.get('/trade', function(req, res) {
-    res.sendFile(path.join(__dirname + '/trade.html'));
-});
-app.get('/topmar', function(req, res) {
-    res.sendFile(path.join(__dirname + '/topmar.html'));
-});
-app.get('/govsize', function(req, res) {
-    res.sendFile(path.join(__dirname + '/govsize.html'));
-});
-app.get('/milin', function(req, res) {
-    res.sendFile(path.join(__dirname + '/milin.html'));
-});
-app.get('/intleg', function(req, res) {
-    res.sendFile(path.join(__dirname + '/intleg.html'));
-});
-app.get('/soundmoney', function(req, res) {
-    res.sendFile(path.join(__dirname + '/soundmoney.html'));
-});
-app.get('/front', function(req, res) {
-    res.sendFile(path.join(__dirname + '/front.html'));
-});
 app.listen(8080);
 
