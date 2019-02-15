@@ -70,14 +70,16 @@
 
     </style>
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    
     <body style="background-image:url(https://www.sas.com/en_us/insights/big-data/data-visualization/_jcr_content/par/styledcontainer_afc8/image.img.jpg/1534433496976.jpg)">
-
 <input onclick="mystatus()" autofocus type="button" value="TO PIE CHART" id="myButton1" />
 <input onclick="mystatus1()"  type="button" value="TO BAR CHART" id="myButton2"  disabled />
-<input type="range" min=1 max=15 step=1 id="year" value=10 oninput="selected_year.value = year.value" >
-<output name="selected_year" id="selected_year">10 </output>
-<svg width="850" height="600"></svg>
+        <input autocomplete="off" type="range" min=1 max=15 step=1 id="year" value=10 oninput="output.value = year.value" >
+        <output name="output" id="output">10 </output>   
+
+<svg width="900" height="600"></svg>
 <div class="dropdown">
         <button onclick="myFunction()" style="background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqBcqdwQwUdP1kvhxOq4FyQlyEGRyavPquzheUdhlONACkcaS1)" class="dropbtn" >Dropdown</button>
         <div id="myDropdown" class="dropdown-content">
@@ -95,16 +97,19 @@
         </div>
       </div>
 <script>
+
     start(10,"bar","rank");
-    var t="rank";
-    function callme(id){
-        t=id;
-        start(10,"bar",t)
-    }
-  var slider = d3.select('#year');
+    var slider = d3.select('#year');
 slider.on('change', function() {
  start(this.value,"bar",t);
 });
+    var t="rank";
+    function callme(id){
+        t=id;
+        var x=document.getElementById('year').value
+        start(x,"bar",t)
+    }
+
 function mystatus(){
 var x=document.getElementById('year').value,
 graph="pie",
@@ -149,7 +154,7 @@ var final =[];
         }
         var max=d3.max(data,function(d){  return Number(d[attribute]);})
         var min=d3.min(data,function(d){return Number(d[attribute]);})
-        console.log(max);
+        //console.log(max);
 
         var diff=max-min
         var bin=diff/a;
@@ -168,7 +173,7 @@ var final =[];
                 test[bined].count += 1;
                 test[bined].value.push(d[attribute]);
              }
-            console.log(bined)
+           // console.log(bined)
         });
         var m,mi;
 var test1 = new Array();
@@ -184,7 +189,7 @@ for(var i=0; i<a; i++)
             mi=d3.min(test[j].value,function(d){return Number(d);})
             var v= m.toFixed(1)
             var vv=mi.toFixed(1)
-    test1[j].dataset1=v+"-"+vv;
+    test1[j].dataset1=vv+"-"+v;
  test1[j].da=test[j].count;
         }
         console.log(test1)
@@ -295,8 +300,8 @@ function pie(){
   d3.select("svg").remove();
   document.getElementById("myButton2").disabled = false;
   document.getElementById("myButton1").disabled = true;
-    var width = 960,
-    height = 500,
+    var width = 850,
+    height = 550,
     radius = Math.min(width, height) / 2;
         var tooltip = d3.select("body").append("div").attr("class", "toolTip");
  

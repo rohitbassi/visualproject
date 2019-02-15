@@ -14,5 +14,8 @@ var path = require('path');
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
+// app.get('/front', function(req, res) {
+//     res.sendFile(path.join(__dirname + '/front.html'));
+// });
 app.listen(8080);
 
